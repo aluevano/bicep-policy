@@ -10,12 +10,6 @@
     },
     "parAssigneePrincipalType": {
       "value": "Group"
-    },
-    "parAssigneeObjectId": {
-      "value": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-    },
-    "parTelemetryOptOut": {
-      "value": false
     }
   }
 }

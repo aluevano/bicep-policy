@@ -4,9 +4,6 @@
     "parameters": {
         "parTargetManagementGroupId": {
             "value": "IDH"
-        },
-        "parTelemetryOptOut": {
-            "value": false
         }
     }
 }

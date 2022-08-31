@@ -1,0 +1,62 @@
+trigger: none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  ServiceConnectionName: "ALZPipelineConnection"
+  ManagementGroupPrefix: "alz"
+  TopLevelManagementGroupDisplayName: "Azure Landing Zones"
+  Location: "eastus"
+  RoleAssignmentManagementGroupId: "alz-platform"
+
+  RunNumber: $(Build.BuildNumber)
+
+jobs:
+- job:
+  steps:
+
+  - task: AzureCLI@2
+    displayName: Az CLI Deploy Management Groups
+    name: create_mgs
+    inputs:
+      azureSubscription: $(ServiceConnectionName)
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az deployment tenant create \
+        --template-file infra-as-code/bicep/modules/managementGroups/managementGroups.bicep \
+        --parameters parTopLevelManagementGroupPrefix=$(ManagementGroupPrefix) parTopLevelManagementGroupDisplayName="$(TopLevelManagementGroupDisplayName)" \
+        --location $(Location) \
+        --name create_mgs-$(RunNumber)
+
+  - task: AzureCLI@2
+    displayName: Az CLI Deploy Custom Policy Definitions
+    name: create_policy_defs
+    inputs:
+      azureSubscription: $(ServiceConnectionName)
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az deployment mg create \
+        --template-file infra-as-code/bicep/modules/policy/definitions/customPolicyDefinitions.bicep  \
+        --parameters @infra-as-code/bicep/modules/policy/definitions/parameters/customPolicyDefinitions.parameters.all.json \
+        --location $(Location) \
+        --management-group-id $(ManagementGroupPrefix) \
+        --name create_policy_defs-$(RunNumber)
+
+  - task: AzureCLI@2
+    displayName: Deploy Default Policy Assignments
+    name: create_policy_assignments
+    inputs:
+      azureSubscription: $(ServiceConnectionName)
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az deployment mg create \
+        --template-file infra-as-code/bicep/modules/policy/assignments/alzDefaults/alzDefaultPolicyAssignments.bicep \
+        --parameters @infra-as-code/bicep/modules/policy/assignments/alzDefaults/parameters/alzDefaultPolicyAssignments.parameters.all.json \
+        --location $(Location) \
+        --management-group-id $(ManagementGroupPrefix) \
+        --name create_policy_assignments-$(RunNumber)
+

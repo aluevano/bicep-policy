@@ -1,7 +1,7 @@
 targetScope = 'managementGroup'
 
-@description('The management group scope to which the policy definitions are to be created at. DEFAULT VALUE = "IDH"')
-param parTargetManagementGroupId string = 'IDH'
+@description('The management group scope to which the policy definitions are to be created at. DEFAULT VALUE = "IDH_Development"')
+param parTargetManagementGroupId string = 'IDH_Development'
 
 var varTargetManagementGroupResourceId = tenantResourceId('Microsoft.Management/managementGroups', parTargetManagementGroupId)
 

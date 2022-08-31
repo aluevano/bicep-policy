@@ -1,7 +1,7 @@
 <#
 SUMMARY: This PowerShell script helps with the authoring of the policy definiton module by outputting information required for the variables within the module.
 DESCRIPTION: This PowerShell script outputs the Name & Path to a Bicep structured .txt file named '_policyDefinitionsBicepInput.txt' ($defintionsTxtFileName) and '_policySetDefinitionsBicepInput.txt' ($defintionsSetTxtFileName) respectively. It also creates a parameters file for each of the policy set definitions. It also outputs the number of policy and policy set definition files to the console for easier reviewing as part of the PR process.
-AUTHOR/S: jtracey93, seseicht
+AUTHOR/S: aluevano, msft-antonio, seseicht
 VERSION: 2.0.0
 #>
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "", Justification="False Positive")]

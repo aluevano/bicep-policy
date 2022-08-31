@@ -3,28 +3,28 @@ targetScope = 'managementGroup'
 @description('The management group scope to which the role can be assigned.  This management group ID will be used for the assignableScopes property in the role definition.')
 param parAssignableScopeManagementGroupId string = 'alz'
 
-module modRolesSubscriptionOwnerRole 'definitions/cafSubscriptionOwnerRole.bicep' = {
+module modRolesSubscriptionOwnerRole 'definitions/SubscriptionOwnerRole.bicep' = {
   name: 'deploy-subscription-owner-role'
   params: {
     parAssignableScopeManagementGroupId: parAssignableScopeManagementGroupId
   }
 }
 
-module modRolesApplicationOwnerRole 'definitions/cafApplicationOwnerRole.bicep' = {
+module modRolesApplicationOwnerRole 'definitions/ApplicationOwnerRole.bicep' = {
   name: 'deploy-application-owner-role'
   params: {
     parAssignableScopeManagementGroupId: parAssignableScopeManagementGroupId
   }
 }
 
-module modRolesNetworkManagementRole 'definitions/cafNetworkManagementRole.bicep' = {
+module modRolesNetworkManagementRole 'definitions/NetworkManagementRole.bicep' = {
   name: 'deploy-network-management-role'
   params: {
     parAssignableScopeManagementGroupId: parAssignableScopeManagementGroupId
   }
 }
 
-module modRolesSecurityOperationsRole 'definitions/cafSecurityOperationsRole.bicep' = {
+module modRolesSecurityOperationsRole 'definitions/SecurityOperationsRole.bicep' = {
   name: 'deploy-security-operations-role'
   params: {
     parAssignableScopeManagementGroupId: parAssignableScopeManagementGroupId

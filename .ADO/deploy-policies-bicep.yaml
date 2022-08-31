@@ -1,19 +1,25 @@
+name: IDH Development - Policy Deployment
+
 trigger: none
 
 pool:
   vmImage: ubuntu-latest
 
 variables:
+  AZURE_RESOURCE_MANAGER_CONNECTION_NAME: "Security Non-prod Service Connection"
   ServiceConnectionName: "ALZPipelineConnection"
   ManagementGroupPrefix: "alz"
   TopLevelManagementGroupDisplayName: "Azure Landing Zones"
+  AZURE_LOCATION: "northcentralus"
   Location: "eastus"
-  RoleAssignmentManagementGroupId: "alz-platform"
+  MANAGEMENT_GROUP_ID: "IDH_Development"
+  RoleAssignmentManagementGroupId: "IDH-Development"
 
   RunNumber: $(Build.BuildNumber)
 
 jobs:
-- job:
+- job: Deployment
+  displayName: "Deployment of IDH Development"
   steps:
 
   - task: AzureCLI@2

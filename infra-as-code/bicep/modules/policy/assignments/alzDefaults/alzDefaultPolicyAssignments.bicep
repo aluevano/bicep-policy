@@ -1,7 +1,7 @@
-@description('Prefix for the management group hierarchy. DEFAULT VALUE = alz')
+@description('Prefix for the management group hierarchy. DEFAULT VALUE = IDH')
 @minLength(2)
 @maxLength(10)
-param parTopLevelManagementGroupPrefix string = 'alz'
+param parTopLevelManagementGroupPrefix string = 'IDH'
 
 @description('The region where the Log Analytics Workspace & Automation Account are deployed. DEFAULT VALUE = eastus')
 param parLogAnalyticsWorkSpaceAndAutomationAccountLocation string = 'eastus'
@@ -21,15 +21,9 @@ param parMsDefenderForCloudEmailSecurityContact string = 'security_contact@repla
 @description('ID of the DdosProtectionPlan which will be applied to the Virtual Networks. If left empty, the policy Enable-DDoS-VNET will not be assigned at connectivity or landing zone Management Groups to avoid VNET deployment issues. Default: Empty String')
 param parDdosProtectionPlanId string = ''
 
-@description('Set Parameter to true to Opt-out of deployment telemetry')
-param parTelemetryOptOut bool = false
-
 var varLogAnalyticsWorkspaceName = split(parLogAnalyticsWorkspaceResourceId, '/')[8]
 
 var varLogAnalyticsWorkspaceResourceGroupName = split(parLogAnalyticsWorkspaceResourceId, '/')[4]
-
-// Customer Usage Attribution Id
-var varCuaid = '98cef979-5a6b-403b-83c7-10c8f04ac9a2'
 
 // **Variables**
 // Orchestration Module Variables
@@ -230,12 +224,6 @@ var varTopLevelManagementGroupResourceId = '/providers/Microsoft.Management/mana
 // **Scope**
 targetScope = 'managementGroup'
 
-// Optional Deployment for Customer Usage Attribution
-module modCustomerUsageAttribution '../../../../CRML/customerUsageAttribution/cuaIdManagementGroup.bicep' = if (!parTelemetryOptOut) {
-  #disable-next-line no-loc-expr-outside-params //Only to ensure telemetry data is stored in same location as deployment. See https://github.com/Azure/ALZ-Bicep/wiki/FAQ#why-are-some-linter-rules-disabled-via-the-disable-next-line-bicep-function for more information
-  name: 'pid-${varCuaid}-${uniqueString(deployment().location)}'
-  params: {}
-}
 
 // Modules - Policy Assignments - Intermediate Root Management Group
 // Module - Policy Assignment - Deploy-MDFC-Config
@@ -264,7 +252,6 @@ module modPolicyAssignmentIntRootDeployMdfcConfig '../../../policy/assignments/p
       varRbacRoleDefinitionIds.owner
     ]
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDeployMdfcConfig.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -288,7 +275,6 @@ module modPolicyAssignmentIntRootDeployAzActivityLog '../../../policy/assignment
       varRbacRoleDefinitionIds.owner
     ]
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDeployAzActivityLog.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -307,7 +293,6 @@ module modPolicyAssignmentIntRootDeployAscMonitoring '../../../policy/assignment
     parPolicyAssignmentParameters: varPolicyAssignmentDeployAscMonitoring.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDeployAscMonitoring.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDeployAscMonitoring.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -331,7 +316,6 @@ module modPolicyAssignmentIntRootDeployResourceDiag '../../../policy/assignments
     parPolicyAssignmentIdentityRoleDefinitionIds: [
       varRbacRoleDefinitionIds.owner
     ]
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -355,7 +339,6 @@ module modPolicyAssignmentIntRootDeployVmMonitoring '../../../policy/assignments
     parPolicyAssignmentIdentityRoleDefinitionIds: [
       varRbacRoleDefinitionIds.owner
     ]
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -379,7 +362,6 @@ module modPolicyAssignmentIntRootDeployVmssMonitoring '../../../policy/assignmen
     parPolicyAssignmentIdentityRoleDefinitionIds: [
       varRbacRoleDefinitionIds.owner
     ]
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -404,7 +386,6 @@ module modPolicyAssignmentConnEnableDdosVnet '../../../policy/assignments/policy
     parPolicyAssignmentIdentityRoleDefinitionIds: [
       varRbacRoleDefinitionIds.networkContributor
     ]
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -421,7 +402,6 @@ module modPolicyAssignmentIdentDenyPublicIp '../../../policy/assignments/policyA
     parPolicyAssignmentParameters: varPolicyAssignmentDenyPublicIp.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenyPublicIp.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenyPublicIp.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -437,7 +417,6 @@ module modPolicyAssignmentIdentDenyRdpFromInternet '../../../policy/assignments/
     parPolicyAssignmentParameters: varPolicyAssignmentDenyRdpFromInternet.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenyRdpFromInternet.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenyRdpFromInternet.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -453,7 +432,6 @@ module modPolicyAssignmentIdentDenySubnetWithoutNsg '../../../policy/assignments
     parPolicyAssignmentParameters: varPolicyAssignmentDenySubnetWithoutNsg.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenySubnetWithoutNsg.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenySubnetWithoutNsg.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -472,7 +450,6 @@ module modPolicyAssignmentIdentDeployVmBackup '../../../policy/assignments/polic
     parPolicyAssignmentIdentityRoleDefinitionIds: [
       varRbacRoleDefinitionIds.owner
     ]
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -512,7 +489,6 @@ module modPolicyAssignmentMgmtDeployLogAnalytics '../../../policy/assignments/po
     parPolicyAssignmentIdentityRoleDefinitionIds: [
       varRbacRoleDefinitionIds.owner
     ]
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -529,7 +505,6 @@ module modPolicyAssignmentLzsDenyIpForwarding '../../../policy/assignments/polic
     parPolicyAssignmentParameters: varPolicyAssignmentDenyIpForwarding.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenyIpForwarding.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenyIpForwarding.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -545,7 +520,6 @@ module modPolicyAssignmentLzsDenyRdpFromInternet '../../../policy/assignments/po
     parPolicyAssignmentParameters: varPolicyAssignmentDenyRdpFromInternet.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenyRdpFromInternet.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenyRdpFromInternet.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -561,7 +535,6 @@ module modPolicyAssignmentLzsDenySubnetWithoutNsg '../../../policy/assignments/p
     parPolicyAssignmentParameters: varPolicyAssignmentDenySubnetWithoutNsg.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenySubnetWithoutNsg.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenySubnetWithoutNsg.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -580,7 +553,6 @@ module modPolicyAssignmentLzsDeployVmBackup '../../../policy/assignments/policyA
     parPolicyAssignmentIdentityRoleDefinitionIds: [
       varRbacRoleDefinitionIds.owner
     ]
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -604,7 +576,6 @@ module modPolicyAssignmentLzsEnableDdosVnet '../../../policy/assignments/policyA
     parPolicyAssignmentIdentityRoleDefinitionIds: [
       varRbacRoleDefinitionIds.networkContributor
     ]
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -620,7 +591,6 @@ module modPolicyAssignmentLzsDenyStorageHttp '../../../policy/assignments/policy
     parPolicyAssignmentParameters: varPolicyAssignmentDenyStorageHttp.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenyStorageHttp.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenyStorageHttp.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -639,7 +609,6 @@ module modPolicyAssignmentLzsDeployAksPolicy '../../../policy/assignments/policy
     parPolicyAssignmentIdentityRoleDefinitionIds: [
       varRbacRoleDefinitionIds.aksContributor
     ]
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -655,7 +624,6 @@ module modPolicyAssignmentLzsDenyPrivEscalationAks '../../../policy/assignments/
     parPolicyAssignmentParameters: varPolicyAssignmentDenyPrivEscalationAks.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenyPrivEscalationAks.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenyPrivEscalationAks.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -671,7 +639,6 @@ module modPolicyAssignmentLzsDenyPrivContainersAks '../../../policy/assignments/
     parPolicyAssignmentParameters: varPolicyAssignmentDenyPrivContainersAks.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenyPrivContainersAks.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenyPrivContainersAks.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -687,7 +654,6 @@ module modPolicyAssignmentLzsEnforceAksHttps '../../../policy/assignments/policy
     parPolicyAssignmentParameters: varPolicyAssignmentEnforceAksHttps.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentEnforceAksHttps.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentEnforceAksHttps.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -703,7 +669,6 @@ module modPolicyAssignmentLzsEnforceTlsSsl '../../../policy/assignments/policyAs
     parPolicyAssignmentParameters: varPolicyAssignmentEnforceTlsSsl.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentEnforceTlsSsl.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentEnforceTlsSsl.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -722,7 +687,6 @@ module modPolicyAssignmentLzsDeploySqlDbAuditing '../../../policy/assignments/po
     parPolicyAssignmentIdentityRoleDefinitionIds: [
       varRbacRoleDefinitionIds.owner
     ]
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -741,7 +705,6 @@ module modPolicyAssignmentLzsDeploySqlThreat '../../../policy/assignments/policy
     parPolicyAssignmentIdentityRoleDefinitionIds: [
       varRbacRoleDefinitionIds.owner
     ]
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -758,7 +721,6 @@ module modPolicyAssignmentLzsDenyPublicEndpoints '../../../policy/assignments/po
     parPolicyAssignmentParameters: varPolicyAssignmentDenyPublicEndpoints.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenyPublicEndpoints.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenyPublicEndpoints.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -774,7 +736,6 @@ module modPolicyAssignmentLzsDenyPublicIp '../../../policy/assignments/policyAss
     parPolicyAssignmentParameters: varPolicyAssignmentDenyPublicIp.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenyPublicIp.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenyPublicIp.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -790,7 +751,6 @@ module modPolicyAssignmentLzsDenyDataBPip '../../../policy/assignments/policyAss
     parPolicyAssignmentParameters: varPolicyAssignmentDenyDataBPip.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenyDataBPip.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenyDataBPip.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -806,7 +766,6 @@ module modPolicyAssignmentLzsDenyDataBSku '../../../policy/assignments/policyAss
     parPolicyAssignmentParameters: varPolicyAssignmentDenyDataBSku.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenyDataBSku.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenyDataBSku.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }
 
@@ -822,6 +781,5 @@ module modPolicyAssignmentLzsDenyDataBVnet '../../../policy/assignments/policyAs
     parPolicyAssignmentParameters: varPolicyAssignmentDenyDataBVnet.libDefinition.properties.parameters
     parPolicyAssignmentIdentityType: varPolicyAssignmentDenyDataBVnet.libDefinition.identity.type
     parPolicyAssignmentEnforcementMode: varPolicyAssignmentDenyDataBVnet.libDefinition.properties.enforcementMode
-    parTelemetryOptOut: parTelemetryOptOut
   }
 }

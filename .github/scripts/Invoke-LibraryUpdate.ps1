@@ -32,7 +32,7 @@ $ErrorActionPreference = "Stop"
 # This script relies on a custom set of classes and functions
 # defined within the EnterpriseScaleLibraryTools PowerShell
 # module.
-$esltModuleDirectory = $TargetModulePath + "/.github/scripts/EnterpriseScaleLibraryTools"
+$esltModuleDirectory = $TargetModulePath + "/.ADO/scripts/EnterpriseScaleLibraryTools"
 $esltModulePath = "$esltModuleDirectory/EnterpriseScaleLibraryTools.psm1"
 Import-Module $esltModulePath -ErrorAction Stop
 

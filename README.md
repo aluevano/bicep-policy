@@ -1,4 +1,4 @@
-# Azure Landing Zones (ALZ) - Bicep
+# Azure Policies Deployment - Bicep
 
 [![Update Policy Library](https://github.com/Azure/ALZ-Bicep/actions/workflows/update-policy.yml/badge.svg?branch=main)](https://github.com/Azure/ALZ-Bicep/actions/workflows/update-policy.yml)
 
@@ -6,7 +6,7 @@
 
 ![Bicep Logo](docs/wiki/media/bicep-logo.png)
 
-Welcome to the Azure Landing Zones Bicep repo.
+Welcome to the Azure Policy Bicep repo.
 
 Detailed information about how to use, deploy and extend artifacts found in this repo can be found on our Wiki:
 
@@ -60,24 +60,6 @@ We have created a short 3-part series of video on the Azure Enablement Show that
 
 [![Part 3 - Azure Landing Zones Bicep - Enabling landing zones](https://img.youtube.com/vi/cZ7IN3zGbyM/hqdefault.jpg)](https://aka.ms/azenable/96)
 <!-- markdownlint-restore -->
-## Contributing
-
-This project welcomes contributions and suggestions. Please review our [Contributing guide][wiki_contributing] in the Wiki. Once your PR is created and submitted a member of the team will triage, review and discuss with you 👍
-Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit the [Microsoft Contributor License Agreement page](https://cla.opensource.microsoft.com).
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
-## Telemetry
-
-When you deploy one or more modules in Azure Landing Zones Bicep repo, Microsoft can identify the installation of said module/s with the deployed Azure resources. Microsoft can correlate these resources used to support the software. Microsoft collects this information to provide the best experiences with their products and to operate their business. The telemetry is collected through customer usage attribution. The data is collected and governed by [Microsoft's privacy policies](https://www.microsoft.com/trustcenter).
-
-If you don't wish to send usage data to Microsoft, details on how to turn it off can be found [here][wiki_cuaid].
 
 ## Trademarks
 
@@ -108,8 +90,6 @@ For support on the artifacts contained in this repository, please refer to [this
 [wiki_policy_defs]:                        https://github.com/Azure/ALZ-Bicep/wiki/AddingPolicyDefs "Wiki - Policy Definitions"
 [wiki_policy_assignments]:                        https://github.com/Azure/ALZ-Bicep/wiki/AssigningPolicies "Wiki - Policy Assignments"
 [wiki_contributing]:                          https://github.com/Azure/ALZ-Bicep/wiki/Contributing "Wiki - Contributing"
-[wiki_cuaid]:                          https://github.com/Azure/ALZ-Bicep/wiki/CustomerUsage "Wiki - Telemetry Usage ID"
-[wiki_acrdeploy]:                          https://github.com/Azure/ALZ-Bicep/wiki/ACRDeployment "Wiki - Private Bicep Registry"
 [vulnerability_reporting]:                          https://github.com/Azure/ALZ-Bicep/blob/main/SECURITY.md "Vulnerability reporting"
 [support_statement]:                          https://github.com/Azure/ALZ-Bicep/blob/main/SUPPORT.md "Microsoft Support Policy"
 [wiki_faq]:                          https://github.com/Azure/ALZ-Bicep/wiki/FAQ "Wiki - FAQs"
